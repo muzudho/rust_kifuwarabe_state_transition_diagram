@@ -1,8 +1,7 @@
 /// 参考:
 /// https://github.com/serde-rs/json
 /// https://stackoverflow.com/questions/30292752/how-do-i-parse-a-json-file |How do I parse a JSON File?
-#[macro_use]
-extern crate serde_derive;
+// extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 
@@ -16,5 +15,5 @@ macro_rules! hashmap {
     }}
 }
 
-pub mod models;
-pub mod graph;
+pub mod diagram_player;
+pub mod diagram;

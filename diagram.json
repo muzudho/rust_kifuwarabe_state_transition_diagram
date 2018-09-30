@@ -6,28 +6,20 @@
         {
             "label": "neutral",
             "exit": {
-                "walk": [
-                    "walking"
-                ],
-                "run": [
-                    "running"
-                ]
+                "walk": "walking",
+                "run": "running"
             }
         },
         {
             "label": "walking",
             "exit": {
-                "stop": [
-                    "neutral"
-                ]
+                "stop": "neutral"
             }
         },
         {
             "label": "running",
             "exit": {
-                "stop": [
-                    "neutral"
-                ]
+                "stop": "neutral"
             }
         }
     ]
