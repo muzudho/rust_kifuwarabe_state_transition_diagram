@@ -47,7 +47,7 @@
 [dependencies]
 serde_json = "1.0"
 
-[dependencies.kifuwarabe_shell]
+[dependencies.kifuwarabe_state_transition_diagram]
 git = "https://github.com/muzudho/rust_kifuwarabe_state_transition_diagram.git"
 rev = "bf0f994... Please get new rev from git hub."
 ```
