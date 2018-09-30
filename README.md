@@ -33,12 +33,13 @@
 }
 ```
 
-フォーマットはこれだけ。
+フォーマットはこれだけ。  
 
 - ```entry_point``` が迷路の入り口にあたる。１つしか書けない。
 - ```nodes``` が 迷路の各部屋にあたる。部屋はどこかの部屋とつながることができる。
 - ```label``` が 迷路の部屋名にあたる。
-- ```exit``` が 別の部屋とのつながり を書いている。walk というドアは walking 部屋につながっている感じだぜ。１つの部屋に ドアはたくさん付けれるぜ。
+- ```exit``` が 別の部屋とのつながり を書いている。walk というドアは walking 部屋につながっている感じだぜ。１つの部屋に ドアはたくさん付けれるぜ。  
+
 
 # Instration.
 
@@ -125,7 +126,35 @@ pub fn() {
 }
 ```
 
-あとは ダイアグラム プレイヤーというのが実行してくれる。
+実行結果。
+
+```
+entry_point: neutral
+nodes
+  - running
+    | stop
+    +----> neutral
+  - neutral
+    | walk
+    +----> walking
+    | run
+    +----> running
+  - walking
+    | stop
+    +----> neutral
+Start!
+walk
+ --> walking.
+stop
+ --> neutral.
+run
+ --> running.
+stop
+ --> neutral.
+Finished.
+```
+
+ダイアグラムを１個作ってしまえば、あとは ダイアグラム プレイヤー を何個でも作って使いまわせだぜ。
 
 - .forward() - 遷移だぜ。ドアの名前を指定しろだぜ。
 - .get_current() - 現在、居るところの 迷路の部屋のラベルだな。
