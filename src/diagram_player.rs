@@ -59,7 +59,7 @@ impl DiagramPlayer {
         let current_node = self.diagram.get_node(&self.current_label);
 
         // 次のノード名に変更する。
-        self.current_label = match current_node.get_exits_map().get(exit_label) {
+        self.current_label = match current_node.get_exit_map().get(exit_label) {
             Some(n) => n.to_string(),
             None => "".to_string(),
         }

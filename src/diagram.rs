@@ -16,28 +16,28 @@ use std::collections::HashMap;
 /// * `fn_name` - 次の exit を返すコールバック関数名。
 /// * `exit_link` - 次はどのノードにつながるか。<任意の名前, ノード名>
 pub struct Node {
-    exits: HashMap<String, String>,
+    exit_map: HashMap<String, String>,
 }
 impl Node {
     /// 確認用。
-    pub fn get_exits_map(&self) -> &HashMap<String, String> {
-        &self.exits
+    pub fn get_exit_map(&self) -> &HashMap<String, String> {
+        &self.exit_map
     }
-    pub fn get_exits(&self, exit_label: &str) -> String {
-        if self.contains_exits(&exit_label.to_string()) {
-            match self.exits.get(exit_label) {
+    pub fn get_exit(&self, exit_label: &str) -> String {
+        if self.contains_exit(&exit_label.to_string()) {
+            match self.exit_map.get(exit_label) {
                 Some(n) => n.to_string(),
                 None => "".to_string(),
             }
         } else {
             panic!(
-                "\"{}\" exit is not found. Please use contains_exits().",
+                "\"{}\" exit is not found. Please use contains_exit().",
                 exit_label
             );
         }
     }
-    pub fn contains_exits(&self, exit_label: &str) -> bool {
-        self.exits.contains_key(exit_label)
+    pub fn contains_exit(&self, exit_label: &str) -> bool {
+        self.exit_map.contains_key(exit_label)
     }
 }
 
@@ -68,6 +68,7 @@ impl Diagram {
         self.node_map.clear();
         self.entrance_vec.clear();
     }
+    /// 確認用。
     pub fn get_entrance_vec(&self) -> &Vec<String> {
         &self.entrance_vec
     }
@@ -88,16 +89,16 @@ impl Diagram {
     ///
     /// * `label` - 登録用のノード名です。
     /// * `node` - ノードです。
-    /// * `exits2` - 次はどのノードにつながるか。<任意の名前, ノード名>
+    /// * `exit_map2` - 次はどのノードにつながるか。<任意の名前, ノード名>
     pub fn insert_node(
         &mut self,
         label: String,
-        exits2: HashMap<String, String>,
+        exit_map2: HashMap<String, String>,
     ) {
         self.node_map.insert(
             label,
             Node {
-                exits: exits2,
+                exit_map: exit_map2,
             },
         );
     }

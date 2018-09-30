@@ -1,5 +1,5 @@
 [package]
-name = "rust_kifuwarabe_state_transition_diagram"
+name = "kifuwarabe_state_transition_diagram"
 version = "0.1.0"
 authors = ["むずでょ <muzudho1@gmail.com>"]
 

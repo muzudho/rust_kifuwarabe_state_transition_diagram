@@ -1,4 +1,4 @@
-extern crate kifuwarabe_shell;
+extern crate kifuwarabe_state_transition_diagram;
 /// 1行実行するだけ。
 /// ```
 /// ### [Windows]+[R]キー, "cmd"+[Enter]。
@@ -6,16 +6,15 @@ extern crate kifuwarabe_shell;
 /// cd C:\MuzudhoDrive\projects_rust\rust_kifuwarabe_state_transition_diagram
 /// 
 /// ### 以下のコマンドで実行。
-/// cargo run --example one-line
+/// cargo run --example main
 /// ```
 // 参考:
 // https://github.com/serde-rs/json |serde_json
 extern crate serde_json;
-use kifuwarabe_shell::graph::*;
-use kifuwarabe_shell::shell::*;
+use kifuwarabe_state_transition_diagram::diagram_player::*;
+use kifuwarabe_state_transition_diagram::diagram::*;
 
-mod test_scenario;
-use test_scenario::*;
+const DIAGRAM_JSON_FILE: &str = "diagram.json";
 
 /// # テスト方法。
 ///
@@ -42,24 +41,23 @@ use test_scenario::*;
 ///     Reload.
 ///     graph.json ファイルを再読み込みするはず。
 fn main() {
-    // 任意のオブジェクト。
-    let mut shell_var = ShellVar::new();
-    // シェルの作成。
-    let mut shell = Shell::new();
+    // ダイアグラム再生機 の作成。
+    let mut diagramPlayer = DiagramPlayer::new();
 
-    // グラフの作成。
-    let mut graph : Graph<ShellVar> = Graph::new();
-    setup_graph(&mut graph); // test_scenario.rs 参照。
+    // ダイアグラムの作成。
+    let mut diagram : Diagram = Diagram::new();
+    // ファイルからグラフのノード構成を読取。
+    diagram.read_file(&DIAGRAM_JSON_FILE);
 
     // 内容確認出力。
     {
         println!("entrance");
-        for node in graph.get_entrance_vec().iter() {
+        for node in diagram.get_entrance_vec().iter() {
             println!("  - {}", node);
         }
 
         println!("nodes");
-        for (node_label, node) in graph.get_node_map().iter() {
+        for (node_label, node) in diagram.get_node_map().iter() {
             println!("  - {} {}", node_label, node.get_token());
             for (exits_label, exits_vec) in node.get_exits_map().iter() {
                 println!("    - {}", exits_label);
