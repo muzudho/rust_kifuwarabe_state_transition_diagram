@@ -1,6 +1,7 @@
-/// アプリケーション１つにつき、１つのグラフを持ちます。
-// 参考:
-// https://github.com/serde-rs/json
+/// 状態遷移図。
+/// 
+/// 参考:
+/// https://github.com/serde-rs/json |シリアライズ、デシリアライズ。
 extern crate serde_json;
 use serde_json::Value;
 
@@ -9,17 +10,15 @@ use std::io::Read;
 
 use std::collections::HashMap;
 
-/// トークンと、コントローラーのペアです。
+/// ノード。
 ///
 /// # Members
 ///
-/// * `fn_name` - 次の exit を返すコールバック関数名。
-/// * `exit_link` - 次はどのノードにつながるか。<任意の名前, ノード名>
+/// * `exit_map` - 次はどのノードにつながるか。<任意の名前, ノード ラベル>
 pub struct Node {
     exit_map: HashMap<String, String>,
 }
 impl Node {
-    /// 確認用。
     pub fn get_exit_map(&self) -> &HashMap<String, String> {
         &self.exit_map
     }
@@ -45,7 +44,7 @@ impl Node {
 /// 
 /// # Parameters.
 ///
-/// * `entrance_vec` - スタート地点となる ノード ラベル。
+/// * `entry_point` - スタート地点となる ノード ラベル。
 /// * `node_map` - ノードのマップ。ラベルがキー。
 #[derive(Default)]
 pub struct Diagram {
@@ -63,14 +62,13 @@ impl Diagram {
     pub fn get_node_map(&self) -> &HashMap<String, Node> {
         &self.node_map
     }
-    /// クリアー。（登録したコントローラーを除く）
+    /// クリアー。
     pub fn clear_graph(&mut self) {
         self.entry_point = "".to_string();
         self.node_map.clear();
     }
     /// 開始ノード ラベル。
     pub fn get_entry_point(&self) -> String {
-        println!("開始ノード ラベル。");
         self.entry_point.to_string()
     }
     /// 開始ノード ラベル。
@@ -89,9 +87,8 @@ impl Diagram {
     }
     /// # Arguments
     ///
-    /// * `label` - 登録用のノード名です。
-    /// * `node` - ノードです。
-    /// * `exit_map2` - 次はどのノードにつながるか。<任意の名前, ノード名>
+    /// * `label` - ノードのラベル。
+    /// * `exit_map2` - 次はどのノードにつながるか。<任意の名前, ノード ラベル>
     pub fn insert_node(
         &mut self,
         label: String,
@@ -126,7 +123,7 @@ impl Diagram {
             Err(err) => panic!("File open error. {:?}", err),
         };
 
-        // 文字列に変換する。
+        // 変換。
         self.entry_point = v["entry_point"].as_str().unwrap().to_string();
 
         for node in v["nodes"].as_array().unwrap().iter() {
@@ -134,18 +131,14 @@ impl Diagram {
 
             if !&node["exit"].is_null() {
                 for (name1, value1) in node["exit"].as_object().unwrap().iter() {
-                    println!("exit: {} {}", name1.to_string(), value1.as_str().unwrap());
                     exit_map.insert(name1.to_string(), value1.as_str().unwrap().to_string());
                 }
             }
 
-            println!("insert node: [{}]", node["label"].as_str().unwrap().to_string());
             self.insert_node(
                 node["label"].as_str().unwrap().to_string(),
                 exit_map,
-            );
-            println!("neutral node contains?: {}", self.contains_node("neutral"));
-            
+            );            
         }
     }
 }

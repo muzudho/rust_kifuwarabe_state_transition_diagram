@@ -13,10 +13,8 @@ use diagram::*;
 ///
 /// # Members.
 ///
-/// * `diagram` - ダイアグラム。
 /// * `current_label` - 現在のノードのラベル。
 pub struct DiagramPlayer {
-    pub diagram: Diagram,
     current_label: String,
 }
 impl Default for DiagramPlayer {
@@ -27,44 +25,37 @@ impl Default for DiagramPlayer {
 impl DiagramPlayer {
     pub fn new() -> DiagramPlayer {
         DiagramPlayer {
-            diagram: Diagram::new(),
             current_label: "".to_string(),
         }
     }
 
-    pub fn set_diagram(&mut self, diagram: &Diagram) {
-        self.diagram = diagram.into_inner();
-        self.current_label = diagram.get_entry_point().to_string();
-    }
-
-    /// コマンドを1行も入力していなければ真を返します。
+    /// 現在ノードのラベル。
     pub fn get_current(&self) -> String {
         self.current_label.to_string()
     }
+
+    /// 現在地が遷移図の外か。
     pub fn is_out(&self) -> bool {
-        println!("状態遷移の外か？");
         self.current_label == ""
     }
 
-    /// 1行 処理するだけでいいとき。
-    ///
-    /// - Quits は無効になる。
+    /// 遷移するぜ☆（＾～＾）
     ///
     /// # Arguments.
     ///
-    /// * 'graph' -
-    /// * 't' -
-    /// * 'line' -
-    pub fn forward(&mut self, exit_label: &str) {
-        println!("forward from [{}].", exit_label);
+    /// * 'diagram' - ダイアグラムは毎回指定しろだぜ☆（＾～＾）
+    /// * 'exit_label' - exitのラベル☆（＾～＾）
+    pub fn forward(&mut self, diagram: &Diagram, exit_label: &str) {
+
+        // 現在地が遷移図の外なら、入り口から入れだぜ☆（＾～＾）
+        if self.is_out() {
+            self.current_label = diagram.get_entry_point().to_string();
+        }
 
         // まず ノードを取得。
-        println!("ノードを取得。 [{}]", self.current_label);
-        println!("neutral node contains?: {}", self.diagram.contains_node("neutral"));
-        let current_node = self.diagram.get_node(&self.current_label);
+        let current_node = diagram.get_node(&self.current_label);
 
         // 次のノード名に変更する。
-        println!("ノード名変更。");
         self.current_label = match current_node.get_exit_map().get(exit_label) {
             Some(n) => n.to_string(),
             None => "".to_string(),
