@@ -1,7 +1,5 @@
 {
-    "entrance": [
-        "neutral"
-    ],
+    "entry_point": "neutral",
     "nodes": [
         {
             "label": "neutral",

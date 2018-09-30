@@ -41,29 +41,23 @@ const DIAGRAM_JSON_FILE: &str = "diagram.json";
 ///     Reload.
 ///     graph.json ファイルを再読み込みするはず。
 fn main() {
-    // ダイアグラム再生機 の作成。
-    let mut diagramPlayer = DiagramPlayer::new();
 
     // ダイアグラムの作成。
     let mut diagram : Diagram = Diagram::new();
     // ファイルからグラフのノード構成を読取。
     diagram.read_file(&DIAGRAM_JSON_FILE);
+    println!("neutral node contains?: {}", diagram.contains_node("neutral"));
 
     // 内容確認出力。
     {
-        println!("entrance");
-        for node in diagram.get_entrance_vec().iter() {
-            println!("  - {}", node);
-        }
+        println!("entry_point: {}", diagram.get_entry_point());
 
         println!("nodes");
         for (node_label, node) in diagram.get_node_map().iter() {
-            println!("  - {} {}", node_label, node.get_token());
-            for (exits_label, exits_vec) in node.get_exits_map().iter() {
-                println!("    - {}", exits_label);
-                for exits_item in exits_vec.iter() {
-                    println!("      - {}", exits_item);
-                }
+            println!("  - {}", node_label);
+            for (exit_label, exit_value) in node.get_exit_map().iter() {
+                println!("    - {}", exit_label);
+                println!("      - {}", exit_value);
             }
         }
     }
@@ -71,7 +65,12 @@ fn main() {
     // ****************************************************************************************************
     //  実行。
     // ****************************************************************************************************
+    // ダイアグラム再生機 の作成。
+    let mut diagramPlayer = DiagramPlayer::new();
+    diagramPlayer.set_diagram(&diagram);
+    println!("neutral node contains?: {}", diagramPlayer.diagram.contains_node("neutral"));
+
     println!("Please enter command.");
-    shell.execute_line(&mut graph, &mut shell_var, "ab cde xyz");
-    println!("Finished. shell_var.count: {}.", shell_var.count);
+    diagramPlayer.forward("walk");
+    println!("Finished. shell_var.count: {}.", diagramPlayer.get_current());
 }

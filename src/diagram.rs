@@ -49,13 +49,13 @@ impl Node {
 /// * `node_map` - ノードのマップ。ラベルがキー。
 #[derive(Default)]
 pub struct Diagram {
-    entrance_vec: Vec<String>,
+    entry_point: String,
     node_map: HashMap<String, Node>,
 }
 impl Diagram {
     pub fn new() -> Diagram {
         Diagram {
-            entrance_vec: Vec::new(),
+            entry_point: "".to_string(),
             node_map: HashMap::new(),
         }
     }
@@ -65,15 +65,17 @@ impl Diagram {
     }
     /// クリアー。（登録したコントローラーを除く）
     pub fn clear_graph(&mut self) {
+        self.entry_point = "".to_string();
         self.node_map.clear();
-        self.entrance_vec.clear();
     }
-    /// 確認用。
-    pub fn get_entrance_vec(&self) -> &Vec<String> {
-        &self.entrance_vec
+    /// 開始ノード ラベル。
+    pub fn get_entry_point(&self) -> String {
+        println!("開始ノード ラベル。");
+        self.entry_point.to_string()
     }
-    pub fn set_entrance_vec(&mut self, entrance_vec2: Vec<String>) {
-        self.entrance_vec = entrance_vec2;
+    /// 開始ノード ラベル。
+    pub fn set_entry_point(&mut self, value: String) {
+        self.entry_point = value;
     }
     pub fn get_node(&self, label: &str) -> &Node {
         if self.contains_node(&label.to_string()) {
@@ -103,19 +105,6 @@ impl Diagram {
         );
     }
 
-    /// JSONオブジェクトを、文字列のハッシュマップに変換。
-    ///
-    /// # Arguments.
-    ///
-    /// * 'v' - Json object.
-    /// * 'str_vec' - let str_vec = Vec::new();
-    fn object_to_map(&self, obj: &Value, map0: &mut HashMap<String, String>) {
-        if !obj.is_null() {
-            for (name1, value1) in obj.as_object().unwrap().iter() {
-                map0.insert(name1.to_string(), value1.to_string());
-            }
-        }
-    }
     /// ファイル読み込み
     pub fn read_file(&mut self, file: &str) {
         self.clear_graph();
@@ -138,31 +127,25 @@ impl Diagram {
         };
 
         // 文字列に変換する。
-        {
-            self.entrance_vec.clear();
-            array_to_str_vec(&v["entrance"], &mut self.entrance_vec);
-        }
+        self.entry_point = v["entry_point"].as_str().unwrap().to_string();
 
         for node in v["nodes"].as_array().unwrap().iter() {
             let mut exit_map: HashMap<String, String> = HashMap::new();
-            self.object_to_map(&node["exit"], &mut exit_map);
+
+            if !&node["exit"].is_null() {
+                for (name1, value1) in node["exit"].as_object().unwrap().iter() {
+                    println!("exit: {} {}", name1.to_string(), value1.as_str().unwrap());
+                    exit_map.insert(name1.to_string(), value1.as_str().unwrap().to_string());
+                }
+            }
+
+            println!("insert node: [{}]", node["label"].as_str().unwrap().to_string());
             self.insert_node(
                 node["label"].as_str().unwrap().to_string(),
                 exit_map,
             );
+            println!("neutral node contains?: {}", self.contains_node("neutral"));
+            
         }
-    }
-}
-
-/// JSON配列を、文字列の配列に変換。
-///
-/// # Arguments.
-///
-/// * 'v' - Json array.
-/// * 'str_vec' - let str_vec = Vec::new();
-fn array_to_str_vec(v: &Value, str_vec: &mut Vec<String>) {
-    let value_vec: Vec<Value> = v.as_array().unwrap().to_vec();
-    for node_label in value_vec {
-        str_vec.push(node_label.as_str().unwrap().to_string());
     }
 }
