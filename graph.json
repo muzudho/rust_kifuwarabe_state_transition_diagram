@@ -1,0 +1,34 @@
+{
+    "entrance": [
+        "neutral"
+    ],
+    "nodes": [
+        {
+            "label": "neutral",
+            "exit": {
+                "walk": [
+                    "walking"
+                ],
+                "run": [
+                    "running"
+                ]
+            }
+        },
+        {
+            "label": "walking",
+            "exit": {
+                "stop": [
+                    "neutral"
+                ]
+            }
+        },
+        {
+            "label": "running",
+            "exit": {
+                "stop": [
+                    "neutral"
+                ]
+            }
+        }
+    ]
+}
