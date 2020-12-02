@@ -57,25 +57,25 @@ fn main() {
     //  実行。
     // ****************************************************************************************************
     // ダイアグラム再生機 の作成。
-    let mut diagramPlayer = DiagramPlayer::new();
+    let mut diagram_player = DiagramPlayer::new();
 
     println!("Start!");
 
     println!("walk");
-    diagramPlayer.forward(&diagram, "walk");
-    println!(" --> {}.", diagramPlayer.get_current());
+    diagram_player.forward(&diagram, "walk");
+    println!(" --> {}.", diagram_player.get_current());
 
     println!("stop");
-    diagramPlayer.forward(&diagram, "stop");
-    println!(" --> {}.", diagramPlayer.get_current());
+    diagram_player.forward(&diagram, "stop");
+    println!(" --> {}.", diagram_player.get_current());
 
     println!("run");
-    diagramPlayer.forward(&diagram, "run");
-    println!(" --> {}.", diagramPlayer.get_current());
+    diagram_player.forward(&diagram, "run");
+    println!(" --> {}.", diagram_player.get_current());
 
     println!("stop");
-    diagramPlayer.forward(&diagram, "stop");
-    println!(" --> {}.", diagramPlayer.get_current());
+    diagram_player.forward(&diagram, "stop");
+    println!(" --> {}.", diagram_player.get_current());
 
     println!("Finished.");
 }

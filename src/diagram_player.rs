@@ -52,7 +52,7 @@ impl DiagramPlayer {
             self.current_label = diagram.get_entry_point().to_string();
         }
 
-        // まず ノードを取得。
+        // まず 現在ノードを取得。
         let current_node = diagram.get_node(&self.current_label);
 
         // 次のノード名に変更する。

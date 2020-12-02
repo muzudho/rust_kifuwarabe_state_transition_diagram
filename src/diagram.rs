@@ -63,7 +63,7 @@ impl Diagram {
         &self.node_map
     }
     /// クリアー。
-    pub fn clear_graph(&mut self) {
+    pub fn clear(&mut self) {
         self.entry_point = "".to_string();
         self.node_map.clear();
     }
@@ -75,11 +75,11 @@ impl Diagram {
     pub fn set_entry_point(&mut self, value: String) {
         self.entry_point = value;
     }
-    pub fn get_node(&self, label: &str) -> &Node {
-        if self.contains_node(&label.to_string()) {
-            &self.node_map[label]
+    pub fn get_node(&self, node_label: &str) -> &Node {
+        if self.contains_node(&node_label.to_string()) {
+            &self.node_map[node_label]
         } else {
-            panic!("\"{}\" node is not found.", label);
+            panic!("\"{}\" node is not found.", node_label);
         }
     }
     pub fn contains_node(&self, label: &str) -> bool {
@@ -104,7 +104,7 @@ impl Diagram {
 
     /// ファイル読み込み
     pub fn read_file(&mut self, file: &str) {
-        self.clear_graph();
+        self.clear();
 
         let mut file = match File::open(file) {
             Ok(n) => n,
@@ -123,7 +123,7 @@ impl Diagram {
             Err(err) => panic!("File open error. {:?}", err),
         };
 
-        // 変換。
+        // エントリー・ポイント取得。
         self.entry_point = v["entry_point"].as_str().unwrap().to_string();
 
         for node in v["nodes"].as_array().unwrap().iter() {
